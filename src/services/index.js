@@ -1,9 +1,16 @@
-const { productsMock } = require('../utils/mocks');
+const MongoLib = require('../lib/mongo');
 
 class ProductService {
-  async getProducts() {
-    const products = await Promise.resolve(productsMock);
-    return products || [];
+
+  constructor() {
+    this.collection = 'products';
+    this.mongoDB = new MongoLib();
+  }
+
+  async getProducts({tags} = {}) {
+    const query = tags && {tags: {$in: tags}};
+    const movies = await this.mongoDB.getAll(this.collection, query);
+    return movies || [];
   }
 }
 

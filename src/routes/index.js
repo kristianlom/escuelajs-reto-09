@@ -19,13 +19,21 @@ const platziStore = (app) => {
   });
 
   router.get('/products', async (req, res, next) => {
-    const storeProducts = await productService.getProducts()
-    res.status(200).json(storeProducts);
+    try {
+      const storeProducts = await productService.getProducts();
+      res.status(200).json({
+        data: storeProducts,
+        message: 'Todos los productos'
+      });
+
+    } catch (err) {
+      next(err);
+    }
   });
 
   router.get('*', (req, res) => {
     res.status(404).send('Error 404');
   });
-}
+};
 
 module.exports = platziStore;
